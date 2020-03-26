@@ -43,8 +43,8 @@ class CPU:
     def op_hlt(self, operand_a, operand_b):
         sys.exit(0)
 
-    def op_add(self, operand_a, operand_b):
-        self.alu("ADD", operand_a, operand_b)
+    # def op_add(self, operand_a, operand_b):
+    #     self.alu("ADD", operand_a, operand_b)
 
     def op_mul(self, operand_a, operand_b):
         self.alu("MUL", operand_a, operand_b)
@@ -58,8 +58,14 @@ class CPU:
     def op_call(self, operand_a, operand_b):
         self.push_val(self.pc + 2)
         self.pc = self.reg[operand_a]
-    def op_ret(self, operand_a, operand_b):
-        self.pc = self.pop_val()
+    # def op_ret(self, operand_a, operand_b):
+    #     self.pc = self.pop_val()
+    def op_ret(self):
+        self.pc = self.ram[self.reg[SP]]
+        self.reg[SP] += 1
+    def op_add(self):
+        self.alu("ADD", self.ram_read(self.pc + 1), self.ram_read(self.pc + 2))
+        self.pc += 3
 
     def load(self, filename):
         """Load a program into memory."""
